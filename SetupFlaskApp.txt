@@ -1,0 +1,17 @@
+# To install virtaul environment 
+python -m venv envname
+
+#To activate virtual environment
+
+envname\Scripts\Activate
+
+#To instal all required libraries required to ru flask
+
+pip install flask
+pip install psycopg2
+
+# After installation please use below command to run application
+
+python app.py
+
+

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+html,body{ margin:0; padding:0; height:100%; width:100%; }
+#Flow-Services{
+  height:100%;
+  width:100%;
+  overflow:hidden; /* or overflow:auto; if you want scrollbars */
+}
+h1 {text-align: center;}
+p {text-align: left;}
+div {text-align: center;}
+	.alert {
+	background: white;
+	padding: 1rem;
+	boarder-radius: 50px;
+	color: white:
+	margin: 1rem;
+	}
+table {padding: 10%;}	
+
+#serviceTable {
+ height: 60px;
+ table-layout: fixed;
+}
+
+.theader {
+    background: #f1f1f1;
+    font-weight: bold;
+    padding: 6px;
+	text-align : center;
+	height: 70px;
+	position: sticky;
+}
+
+
+td {
+   
+    padding: 6px;
+	height: 70px;
+	 word-wrap:break-word;
+}
+tr{
+background: #f9f9f9;
+
+
+body {
+  font-family: Arial;
+  margin: 0;
+}
+
+.header {
+  padding: 10px;
+  text-align: center;
+  background: #0096d6;;
+  color: white;
+  font-size: 30px;
+}
+
+.content {padding:10px;}
+
+th {   
+    padding-left: 20%;	
+}
+
+
+
+</style>
+<title>Sat Sure</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="../static/jquery/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"/>
+
+</head>
+
+<script>
+
+
+var alert = false;
+$(document).ready(function () {
+	getheirarchyData(-1, "State")
+
+  $.ajax({
+  type: "GET",
+  url: "/getStat1e",
+  success: function (data) {
+		console.log("data ", data);
+		for(i=0;i<data.length;i++){
+		$("#State").append('<option value = '+ data[i][0] +'>'+ data[i][1]+'</option>')
+		}
+	}
+ }); 
+ 
+ 
+ $(".servicedropdown").change(function () {
+		//console.log("idd ", $(this)[0].id);
+        var selectValue = $(this).val()
+		var id = $(this)[0].parentNode.parentElement.nextElementSibling.id.split('Row')[0];
+        //console.log("you have changed the value ", $(this)[0].parentNode.parentElement.nextElementSibling.nextElementSibling);
+		
+		var DOMElement = $(this)[0].parentNode.parentElement.nextElementSibling;
+		
+		while(DOMElement != null)
+		{
+		var DOMElementId = DOMElement.id.split('Row')[0];
+		console.log("DOMElementId ", DOMElementId);
+		$('#' + DOMElementId + ' option').remove();
+		$("#" + DOMElementId + "Row").css("display", "none")
+		DOMElement = DOMElement.nextElementSibling
+		
+		
+		}
+		
+		getheirarchyData(selectValue, id)
+		
+
+		
+    });
+});
+
+function getheirarchyData(selectValue, id){
+
+		  $.ajax({
+			type: "GET",
+			url: "/getNextHierarchy",
+			data: {value : selectValue, selectedhier : id},
+			success: function (data) {
+			
+			if(data.length > 1)
+			{
+			console.log("data ", data);
+			console.log("id ", id);
+			$("#" + id + "Row").css("display", "block");
+				for(i=0;i<data.length-1;i++){
+				$("#" + id).append('<option value = '+ data[i][0] +'>'+ data[i][1]+'</option>')
+				}
+				$("#" + id + "Label").text(data[data.length-1] +  " : ")
+				
+				$("#" + id).val(-1)
+			}
+			
+			
+	}
+ });
+
+}
+
+</script>
+
+<body>
+
+	<table style="width:100%;">
+	<tr id="StateRow" >
+		<th style="width:40%;"><label for="operation" style="padding-left:50%;display: inline;" id="StateLabel">{{ state }} : </label>
+		<select class="servicedropdown" id="State" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+	<tr id="DistrictRow" style ="display: none">
+		<th style="width:40%;"><label for="operation" style="padding-left:46%;display: inline;" id="DistrictLabel"></label>
+		<select class="servicedropdown" id="District" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+	<tr id="TehsilRow" style ="display: none">
+		<th style="width:40%;"><label for="operation" style="padding-left:48%;display: inline;" id="TehsilLabel"></label>
+		<select class="servicedropdown" id="Tehsil" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+	<tr id="VillageRow" style ="display: none">
+		<th style="width:40%;"><label for="operation" style="padding-left:46%;display: inline;" id="VillageLabel"></label>
+		<select class="servicedropdown" id="Village" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+	<tr id="KhewatRow" style ="display: none">
+		<th style="width:40%;"><label for="operation" style="padding-left:46%;display: inline;" id="KhewatLabel"></label>
+		<select class="servicedropdown" id="Khewat" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+	<tr id="MurrabbaRow" style ="display: none">
+		<th style="width:40%;"><label for="operation" style="padding-left:45%;display: inline;" id="MurrabbaLabel"></label>
+		<select class="servicedropdown" id="Murrabba" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+		<tr id="KhasraRow" style ="display: none">
+		<th style="width:40%;"><label for="operation" style="padding-left:47%;display: inline;" id="KhasraLabel"></label>
+		<select class="servicedropdown" id="Khasra" name="operation" style="padding-left:1%;display: inline;width:250px;">
+			<option value = "-1">Please Select</option></select>
+		</th>
+	</tr>
+	
+	
+	
+	
+	</table>
+	<div>
+	<label id="graph_label" style="float:left;padding-left:8%;"></label>
+	</div>
+
+	</body>
+</html>
+	
+	
